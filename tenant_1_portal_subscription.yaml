@@ -1,0 +1,9 @@
+apiVersion: portal.multitenant.com/v1
+kind: PortalSubscription
+metadata:
+  name: myportal1
+  namespace: portal1
+spec:
+  portals:
+    - { name: "customerportal", replicacount: 1, version: v1 }
+  tenantname: tenant1

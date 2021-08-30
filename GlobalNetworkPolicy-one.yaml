@@ -1,0 +1,16 @@
+apiVersion: crd.projectcalico.org/v1
+kind: GlobalNetworkPolicy
+metadata:
+  name: isolate-tenant1
+spec:
+  namespaceSelector: network == 'portal1'
+  ingress:
+    - action: Allow
+      protocol: TCP
+      source:
+        namespaceSelector: network == 'portal1'
+  egress:
+    - action: Allow
+      protocol: TCP
+      source:
+        namespaceSelector: network == 'portal1'

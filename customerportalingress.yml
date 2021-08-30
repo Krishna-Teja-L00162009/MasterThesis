@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ tenantname }}
+  namespace: {{ namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2  
+spec:
+  rules:
+  - host: {{ tenantname }}
+    http:
+      paths:
+{% for dict_item in portals %}
+      - path: /{{ dict_item.name }}(/|$)(.*)
+        pathType: Prefix      
+        backend:
+          service: 
+            name: {{ dict_item.name }}ser
+            port : 
+              number: 9091
+{% endfor %}
+
+

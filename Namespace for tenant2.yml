@@ -1,0 +1,7 @@
+# Creating namespace for tenant2
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: portal2
+  labels:
+    network: portal2

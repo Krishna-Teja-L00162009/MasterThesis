@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ tenantname }}vs
+  namespace: {{ namespace }}
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - {{ tenantname }}-gateway
+  http:
+{% for dict_item in portals %}
+  - name: {{ dict_item.name }}rule
+    match:
+    - headers:
+        ":authority":
+          regex: "{{ tenantname }}.*"
+      uri:
+        prefix: "/{{ dict_item.name }}"
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: {{ dict_item.name }}ser
+        port:
+          number: 9091
+{% endfor %}
+

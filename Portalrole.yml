@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+  - apiGroups:
+      - ""
+      - "extensions"
+      - "networking.k8s.io"
+    resources: ["secrets", "pods", "pods/exec", "pods/log", "services", "serviceaccounts", "configmaps", "ingresses/status", "ingresses"]
+    verbs: [" create ", "get", " watch ", " list ", "delete ", "patch", "update"]
+  - apiGroups:
+      - apps
+    resources: ["deployments", "daemonsets", "replicasets", "statefulsets"]
+    verbs: [" create ", "get", " watch ", " list ", "delete ", "patch", "update"]
+  - apiGroups:
+      - "networking.istio.io"
+    resources: ["gateways", "virtualservices"]
+    verbs: [" create ", "get", " watch ", " list ", "delete ", "patch", "update"]
+  - apiGroups:
+      - apps
+    resources: ["deployments", "daemonsets", "replicasets", "statefulsets"]
+    verbs: [" create ", "get", " watch ", " list ", "delete ", "patch", "update"]
+  ## Rules for portal.multitenant.com/v1, Kind: Portal
+  - apiGroups:
+      - portal.multitenant.com
+    resources:  [”portalsubscriptions”, “portalsubscriptions/status”, “portalsubscriptions/finalizers” ]
+    verbs: [" create ", "get", " watch ", " list ", "delete ", "patch", "update"]

@@ -1,0 +1,25 @@
+---
+# tasks file for myk8sansible
+- name: Create config maps
+  community.kubernetes.k8s:
+    definition: "{{ lookup('template', 'customerportalcm.yml', template_vars=dict(portalname=item.name, namespace=ansible_operator_meta.namespace)) | from_yaml }}"
+    state: present
+  loop: "{{ portals }}"
+- name: Create portal deployments/replicasets and pods
+  community.kubernetes.k8s:
+    definition: "{{ lookup('template', 'customerportaldeploy.yml', template_vars=dict(portalname=item.name, namespace=ansible_operator_meta.namespace, replicacount=item.replicacount)) | from_yaml }}"
+    state: present
+  loop: "{{ portals }}"
+- name: Create portal services
+  community.kubernetes.k8s:
+    definition: "{{ lookup('template', 'customerportalservice.yml', template_vars=dict(portalname=item.name, namespace=ansible_operator_meta.namespace)) | from_yaml }}"
+    state: present
+  loop: "{{ portals }}"
+- name: Create portal istio gateway
+  community.kubernetes.k8s:
+    definition: "{{ lookup('template', 'customerportalgateway.yml', template_vars=dict(namespace=ansible_operator_meta.namespace)) | from_yaml }}"
+    state: present
+- name: Create portal istio Virtual Service
+  community.kubernetes.k8s:
+    definition: "{{ lookup('template', 'customerportalvirtualservice.yml', template_vars=dict(namespace=ansible_operator_meta.namespace)) | from_yaml }}"
+    state: present
